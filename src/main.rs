@@ -28,10 +28,6 @@ async fn main() -> Result<()> {
             }
         };
         let c = client.clone();
-        let mut s = Vec::new();
-        for i in 0..=100{
-            s.push(format!("{}", i))
-        }
         let task = async move { keep_alive_lease(&c).await};
         let result =tokio::task::spawn(task).await?;
         match result{
@@ -52,58 +48,6 @@ async fn main() -> Result<()> {
         info!("Reconnect etcd ...");
         // interval.tick().await;
     }
-    // let key = "foo";
-    // let value = "bar";
-
-    // // Put a key-value pair
-    // let resp = client.kv().put(PutRequest::new(key, value)).await?;
-
-    // println!("Put Response: {:#?}", resp);
-    // for k in 1..10000 {
-    //     let begin_time = SystemTime::now();
-    //     for i in 1..100000 {
-    //         client.kv().put(PutRequest::new(format!("{}.{}", k, i), "for循环是有条件的循环, 即循环运行特定的次数。 rust语言中for循环的行为与其他语言略有不同。执行for循环直到条件为真。")).await?;
-    //     }
-    //     println!("time in second = {:?}, {} times for 100000, total {} keys", SystemTime::now().duration_since(begin_time).unwrap().as_secs(), k, k*100000);
-    // }
-
-    // println!("Get Response: {:?}", resp);
-    // for k in 1..10000 {
-    //     let begin_time = SystemTime::now();
-    //     for i in 1..100000 {
-    //         client.kv().range(RangeRequest::new(KeyRange::key(format!("{}.{}", k, i)))).await?;
-    //     }
-    //     println!("time in second = {:?}, {} times for 100000, total {} keys", SystemTime::now().duration_since(begin_time).unwrap().as_secs(), k, k*100000);
-    // }
-
-    // println!("Deleting Response: {:?}", resp);
-    // for k in 1..100 {
-    //     let begin_time = SystemTime::now();
-    //     for i in 1..100000 {
-    //         client.kv().delete(DeleteRequest::new(KeyRange::key(format!("{}.{}", k, i)))).await?;
-    //     }
-    //     println!("time in second = {:?}, {} times for 100000, total {} keys", SystemTime::now().duration_since(begin_time).unwrap().as_secs(), k, k*100000);
-    // }
-
-    // println!("Deleting");
-    // let begin_time = SystemTime::now();
-    // for i in 1..100000 {
-    //     client.kv().delete(DeleteRequest::new(KeyRange::key(format!("{}", i)))).await?;
-    // }
-    // println!("time in second = {:?}", SystemTime::now().duration_since(begin_time).unwrap().as_secs());
-    // Get the key-value pair
-    // let resp = client
-    //     .kv()
-    //     .range(RangeRequest::new(KeyRange::key(key)))
-    //     .await?;
-    // println!("Range Response: {:?}", resp);
-
-    // Delete the key-valeu pair
-    // let resp = client
-    //     .kv()
-    //     .delete(DeleteRequest::new(KeyRange::key(key)))
-    //     .await?;
-    // println!("Delete Response: {:?}", resp);
 
    Ok(())
 }
@@ -113,8 +57,8 @@ async fn keep_alive_lease(client: &Client) -> Result<(), String> {
     //lease_time must longer then keep_alive (time)
     // let mut interval = tokio::time::interval(Duration::from_secs(keep_alive));
     // grant lease
-    let lease_time = 10;
-    let keep_alive = 5;
+    let lease_time = 5;
+    let keep_alive = 3;
     let lease = retry_lease(client, lease_time).await?;
     let lease_id = lease.id();
     info!("got lease id = [{}]", lease_id);
