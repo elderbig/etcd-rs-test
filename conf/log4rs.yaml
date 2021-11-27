@@ -1,0 +1,44 @@
+# log4rs.yaml
+# check and reload config file  time 
+refresh_rate: 900 seconds
+# appender 
+appenders:
+  stdout:
+    kind: console
+    encoder:
+      # log format
+      pattern: "{d} - {l} - {f} -line=>{L} - {t} - {m}{n}"
+  # file:
+  #   kind: file
+  #   path: "logs/log.log"
+  #   encoder:
+  #     # log format
+  #     pattern: "{d}-{T}-{h(-{l})} - {f} -> {L} {t} - {m} - {n}"
+
+  roll: #define rooling_file appenders
+    kind: rolling_file
+    path: "logs/viscron.log"
+    append: true
+    encoder:
+      kind: pattern
+      pattern: "{d(%+)(local)} {h({l})} [{f}-> line:{L}]  {m}{n}"
+    policy:
+      kind: compound
+      trigger:
+        kind: size
+        limit: 10mb #limit file size to 1024Byte
+      roller:
+        #        kind: delete
+        kind: fixed_window
+        pattern: 'logs/requests.log.{}.gz'
+        base: 0
+        count: 10
+# global  log config
+
+root:
+#  level: trace
+  level: debug
+  appenders:
+    - stdout
+    #  - file
+    - roll

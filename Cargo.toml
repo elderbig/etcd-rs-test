@@ -1,0 +1,15 @@
+[package]
+name = "etcd-test"
+version = "0.1.0"
+authors = ["oldbig <eldersun@126.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+etcd-rs = "0.5"
+tokio = { version = "*", features = ["full"] }
+log4rs = { version = "*", features = ["gzip"] }
+log = "*"
+futures = "*"
+anyhow = "^1.0.31"
